@@ -1,0 +1,52 @@
+
+import java.io.*;
+import java.util.*;
+
+
+class PPMImage {
+    public final String magicNumber = "P6";
+    int imageWidth;
+    int imageHeight;
+    int maxColorValue;
+    char[] raster;
+
+    public PPMImage() {}
+
+    void readImage(String ppmDirectory) {
+        String currentLine;
+        StringTokenizer stringTokenizer;
+        try{
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(ppmDirectory))));
+            DataInputStream inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(ppmDirectory)));
+            currentLine = bufferedReader.readLine();
+            inputStream.skip((currentLine + "\n").getBytes().length);
+            do {
+                currentLine = bufferedReader.readLine();
+                inputStream.skip((currentLine + "\n").getBytes().length);
+            } while (currentLine.charAt(0) == '#');
+            stringTokenizer = new StringTokenizer(currentLine);
+            imageWidth = Integer.parseInt(stringTokenizer.nextToken());
+            imageHeight = Integer.parseInt(stringTokenizer.nextToken());
+            currentLine = bufferedReader.readLine();
+            inputStream.skip((currentLine + "\n").getBytes().length);
+            stringTokenizer = new StringTokenizer(currentLine);
+            maxColorValue = Integer.parseInt(stringTokenizer.nextToken());
+
+            raster = new char[imageWidth * imageHeight * 3];
+            for(int i = 0; i < (imageWidth * imageHeight * 3); i++) {
+                raster[i] = stringTokenizer.nextToken().charAt(0);
+            }
+
+            bufferedReader.close();
+            inputStream.close();
+
+            System.out.println(imageWidth + " " + imageHeight + " " + maxColorValue);
+        } catch(ArrayIndexOutOfBoundsException e) {
+            System.out.println("Error: image in " + ppmDirectory + " too big");
+        } catch(FileNotFoundException e) {
+            System.out.println("Error: file " + ppmDirectory + " not found");
+        } catch(IOException e) {
+            System.out.println("Error: end of stream encountered when reading " + ppmDirectory);
+        }
+    }
+}
