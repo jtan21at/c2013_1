@@ -16,6 +16,7 @@ class PPMImage {
     private void readImage(String ppmDirectory) {
         String currentLine;
         StringTokenizer stringTokenizer;
+
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(ppmDirectory))));
             DataInputStream inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(ppmDirectory)));
@@ -59,10 +60,22 @@ class PPMImage {
     }
 
     void writeFile(String ppmDirectory) {
+        File outputImage = new File(ppmDirectory);
+            if (!outputImage.isAbsolute()){
+             outputImage = new File(System.getProperty("user.dir")+"\\"+ppmDirectory);}
+           if( outputImage.isDirectory())
+           {System.out.println("Error in path, path is directory instead of file" + ppmDirectory + ".");
+               System.exit(5);}
+            outputImage.mkdirs();
+//           Path ppmDir = Paths.get(ppmDirectory);
+      /*  if (!ppmDir.exists(ppmDir)) {
+              ppmDir.createDirectory(ppmDir);
+          }*/
             try {
                 var header = String.format("P6\n%d %d\n255\n", imageWidth, imageHeight);
-                File outputImage = new File(ppmDirectory+".mod"+".ppm");
-                if(outputImage.exists() && !outputImage.isDirectory()) {
+
+                if(outputImage.exists() || !outputImage.isDirectory())
+                {
                     System.out.println("Overwriting file at " + ppmDirectory + ".");
                     outputImage.delete();
                 } else {
