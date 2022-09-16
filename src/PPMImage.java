@@ -140,9 +140,7 @@ class PPMImage {
         }
         raster = negative;
     }
-}
-
-void compress() {
+    void compress() {
         double originalWidth = imageWidth;
         double originalHeight = imageHeight;
         if(originalWidth%2 == 0) {
@@ -175,3 +173,6 @@ void compress() {
         }
         raster = compress;
     }
+
+}
+
