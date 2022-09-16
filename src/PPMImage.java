@@ -169,7 +169,9 @@ class PPMImage {
             if(i%3 == 2) {
                 i+=3;
             }
+            if (i> raster.length) break;
             index++;
+            if (index> compress.length) break;
         }
         raster = compress;
     }
