@@ -141,3 +141,37 @@ class PPMImage {
         raster = negative;
     }
 }
+
+void compress() {
+        double originalWidth = imageWidth;
+        double originalHeight = imageHeight;
+        if(originalWidth%2 == 0) {
+            imageWidth = imageWidth/2;
+        } else {
+            imageWidth = imageWidth/2 - 1;
+        }
+        if(originalHeight%2 == 0) {
+            imageHeight = imageHeight/2;
+        } else {
+            imageHeight = imageHeight/2 - 1;
+        }
+        System.out.println(originalWidth);
+        System.out.println(originalHeight);
+        System.out.println(imageWidth);
+        System.out.println(imageHeight);
+        char[] compress = new char[imageWidth * imageHeight * 3+100];
+        int index = 0;
+        for(int i = 0; i < (originalWidth * originalHeight * 3); i++) {
+            compress[index] = raster[i];
+            if(i%(originalWidth*3) == (originalWidth*3) - 1) {
+                i+=(originalWidth*3);
+            } else if(i%(originalWidth*3) == (originalWidth*3) - 4) {
+                i+=((originalWidth*3) + 3);
+            }
+            if(i%3 == 2) {
+                i+=3;
+            }
+            index++;
+        }
+        raster = compress;
+    }
