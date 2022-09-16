@@ -61,7 +61,7 @@ class PPMImage {
 
     void writeFile(String ppmDirectory) {
         File outputImage = new File(ppmDirectory);
-            if (!outputImage.isAbsolute()){
+            if (!outputImage.isAbsolute()&&outputImage.canWrite()){
              outputImage = new File(System.getProperty("user.dir")+"\\"+ppmDirectory);}
            if( outputImage.isDirectory())
            {System.out.println("Error in path, path is directory instead of file" + ppmDirectory + ".");
