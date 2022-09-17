@@ -175,6 +175,30 @@ class PPMImage {
         }
         raster = compress;
     }
-
+    void pixelate() {
+        while(imageWidth >= 100 || imageHeight >= 100) {
+            lossyCompress();
+        }
+    }
+    void brightenOrDarken() {
+        Scanner in = new Scanner(System.in);
+        double factor;
+        System.out.print("What factor would you like to use: ");
+        try {
+            factor = Double.parseDouble(in.nextLine());
+        }catch(NumberFormatException e){
+            System.out.println("Error: You did not enter a numerical value. The image will be copied.");
+            factor = 1;
+        }
+        char[] brightenOrDarken = new char[imageWidth * imageHeight * 3];
+        for (int i = 0; i < (imageWidth * imageHeight * 3); i++) {
+            if(factor * raster[i] > 255) {
+                brightenOrDarken[i] = 255;
+            } else {
+                brightenOrDarken[i] = (char) (raster[i] * factor);
+            }
+        }
+        raster = brightenOrDarken;
+    }
 }
 
