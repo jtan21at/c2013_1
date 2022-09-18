@@ -61,12 +61,13 @@ class PPMImage {
 
     void writeFile(String ppmDirectory) {
         File outputImage = new File(ppmDirectory);
-            if (!outputImage.isAbsolute()&&outputImage.canWrite()){
+        outputImage.mkdirs();
+            if (!outputImage.isAbsolute()&&!outputImage.canWrite()){
              outputImage = new File(System.getProperty("user.dir")+"\\"+ppmDirectory);}
            if( outputImage.isDirectory())
            {System.out.println("Error in path, path is directory instead of file" + ppmDirectory + ".");
                System.exit(5);}
-            outputImage.mkdirs();
+
 //           Path ppmDir = Paths.get(ppmDirectory);
       /*  if (!ppmDir.exists(ppmDir)) {
               ppmDir.createDirectory(ppmDir);
@@ -174,6 +175,31 @@ class PPMImage {
             if (index> compress.length) break;
         }
         raster = compress;
+    }
+    void lossyCompress() {
+        double originalWidth = imageWidth;
+        double originalHeight = imageHeight;
+        imageWidth = imageWidth/2;
+        imageHeight = imageHeight/2;
+        char[] compress = new char[imageWidth * imageHeight * 3];
+        try {
+            int index = 0;
+            for (int i = 0; i < (originalWidth * originalHeight * 3); i++) {
+                compress[index] = raster[i];
+                if (i % (originalWidth * 3) == (originalWidth * 3) - 1) {
+                    i += (originalWidth * 3);
+                } else if (i % (originalWidth * 3) == (originalWidth * 3) - 4) {
+                    i += ((originalWidth * 3) + 3);
+                }
+                if (i % 3 == 2) {
+                    i += 3;
+                }
+                index++;
+            }
+            raster = compress;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            raster = compress;
+        }
     }
     void pixelate() {
         while(imageWidth >= 100 || imageHeight >= 100) {
